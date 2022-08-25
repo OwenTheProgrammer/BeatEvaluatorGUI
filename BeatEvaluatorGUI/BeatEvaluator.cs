@@ -12,9 +12,14 @@ namespace BeatEvaluatorGUI
 {
     public partial class BeatEvaluator : Form
     {
-        public BeatEvaluator()
-        {
+        public BeatEvaluator() {
             InitializeComponent();
+        }
+
+        private void EvaluateFolderButton_Click(object sender, EventArgs e) {
+            if(EvalFolderDialog.ShowDialog() == DialogResult.OK) {
+                MapInfoData Info = FileInterpreter.LoadInfoFile(EvalFolderDialog.SelectedPath);
+            }
         }
     }
 }
