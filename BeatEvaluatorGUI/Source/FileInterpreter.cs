@@ -21,7 +21,7 @@ namespace BeatEvaluatorGUI {
                 throw new FileLoadException("Failed to find Info.dat");
             }
 
-            string InfoFileData = File.ReadAllText(WorkingDir + "\\Info.dat");
+            string InfoFileData = File.ReadAllText(WorkingDir + "Info.dat");
             dynamic InfoJson = JsonConvert.DeserializeObject(InfoFileData);
             MapInfoData CollectedData;
             CollectedData.SongName = InfoJson._songName;
@@ -39,7 +39,7 @@ namespace BeatEvaluatorGUI {
                 if(Characteristic == "Standard") {
                     StandardSet = sets[i];
                     break;
-                }        
+                }   
             }
             if(StandardSet == null) {
                 throw new FieldAccessException("Failed to find standard mapping");
@@ -51,6 +51,20 @@ namespace BeatEvaluatorGUI {
             return CollectedData;
         }
 
-        public static 
+        public static void EvaluateMapDiff(MapInfoData Info, string Path, MapDifficulty Diff) {
+            if(!File.Exists(Path)) {
+                throw new FileNotFoundException("Failed to find file");
+            }
+
+            string MapBuffer = File.ReadAllText(Path);
+            JSON_MapHandle JsonBuffer = JsonConvert.DeserializeObject<JSON_MapHandle>(MapBuffer);
+
+            Criteria Current;
+            Current.Difficulty = Diff;
+
+            #region Hot Start Detection
+            Current.HotStart = (JsonBuffer._notes[0]._time / Info.BPM) * 60.0f;
+            #endregion
+        }
     }
 }

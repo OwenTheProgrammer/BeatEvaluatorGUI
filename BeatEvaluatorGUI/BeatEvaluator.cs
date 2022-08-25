@@ -18,7 +18,13 @@ namespace BeatEvaluatorGUI
 
         private void EvaluateFolderButton_Click(object sender, EventArgs e) {
             if(EvalFolderDialog.ShowDialog() == DialogResult.OK) {
-                MapInfoData Info = FileInterpreter.LoadInfoFile(EvalFolderDialog.SelectedPath);
+                string FolderPath = EvalFolderDialog.SelectedPath + '\\';
+
+                MapInfoData Info = FileInterpreter.LoadInfoFile(FolderPath);
+                foreach(var MapDiff in Info.DiffPaths) {
+                    string DiffPath = FolderPath + MapDiff.Value;
+                    FileInterpreter.EvaluateMapDiff(Info, DiffPath, MapDiff.Key);
+                }
             }
         }
     }
