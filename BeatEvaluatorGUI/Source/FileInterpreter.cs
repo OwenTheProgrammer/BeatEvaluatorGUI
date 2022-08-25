@@ -65,7 +65,7 @@ namespace BeatEvaluatorGUI {
             int BlockCount = JsonBuffer._notes.Count;
             Console.WriteLine($"Evaluating {BlockCount} blocks..");
 
-            Criteria Current;
+            Criteria Current = new Criteria();
             Current.Difficulty = Diff;
 
             #region Hot Start Detection
@@ -112,6 +112,7 @@ namespace BeatEvaluatorGUI {
                     Current.WallMinDuration.Add(handle._time);
                 }
             }
+            Current.PassedCriteria = Current.Met();
             return Current;
             #endregion
         }

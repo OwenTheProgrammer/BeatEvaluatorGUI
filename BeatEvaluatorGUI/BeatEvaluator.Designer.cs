@@ -33,7 +33,10 @@
             this.FileInterfacePanel = new System.Windows.Forms.Panel();
             this.EvaluateFolderButton = new System.Windows.Forms.Button();
             this.EvalFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.EvaluationPanel = new System.Windows.Forms.Panel();
+            this.QueueTree = new System.Windows.Forms.TreeView();
             this.FileInterfacePanel.SuspendLayout();
+            this.EvaluationPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // HeaderPanel
@@ -74,12 +77,32 @@
             this.EvaluateFolderButton.UseVisualStyleBackColor = false;
             this.EvaluateFolderButton.Click += new System.EventHandler(this.EvaluateFolderButton_Click);
             // 
+            // EvaluationPanel
+            // 
+            this.EvaluationPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.EvaluationPanel.Controls.Add(this.QueueTree);
+            this.EvaluationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EvaluationPanel.Location = new System.Drawing.Point(200, 60);
+            this.EvaluationPanel.Name = "EvaluationPanel";
+            this.EvaluationPanel.Size = new System.Drawing.Size(734, 451);
+            this.EvaluationPanel.TabIndex = 2;
+            // 
+            // QueueTree
+            // 
+            this.QueueTree.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.QueueTree.ForeColor = System.Drawing.Color.White;
+            this.QueueTree.Location = new System.Drawing.Point(6, 6);
+            this.QueueTree.Name = "QueueTree";
+            this.QueueTree.Size = new System.Drawing.Size(438, 433);
+            this.QueueTree.TabIndex = 0;
+            // 
             // BeatEvaluator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(934, 511);
+            this.Controls.Add(this.EvaluationPanel);
             this.Controls.Add(this.FileInterfacePanel);
             this.Controls.Add(this.HeaderPanel);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -89,6 +112,7 @@
             this.Name = "BeatEvaluator";
             this.Text = "Beat Evaluator";
             this.FileInterfacePanel.ResumeLayout(false);
+            this.EvaluationPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -99,6 +123,8 @@
         private System.Windows.Forms.Panel FileInterfacePanel;
         private System.Windows.Forms.Button EvaluateFolderButton;
         private System.Windows.Forms.FolderBrowserDialog EvalFolderDialog;
+        private System.Windows.Forms.Panel EvaluationPanel;
+        private System.Windows.Forms.TreeView QueueTree;
     }
 }
 

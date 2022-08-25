@@ -71,5 +71,17 @@ namespace BeatEvaluatorGUI {
         public List<float> WallWidth;
         public List<float> WallDuration;
         public List<float> WallMinDuration;
+
+        public bool PassedCriteria;
+
+        //Built this stupidly but easily modifiable
+        public bool Met() {
+            return (HotStart > 1.5f) &&
+                   (ColdEnd > 2.0f) &&
+                   (NoteOverlaps.Count == 0) &&
+                   (WallWidth.Count == 0) &&
+                   (WallDuration.Count == 0) &&
+                   (WallMinDuration.Count == 0);
+        }
     }
 }
