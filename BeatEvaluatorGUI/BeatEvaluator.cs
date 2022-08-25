@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace BeatEvaluatorGUI
 {
-    public partial class Form1 : Form
+    public partial class BeatEvaluator : Form
     {
-        public Form1()
+        public BeatEvaluator()
         {
             InitializeComponent();
         }

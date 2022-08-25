@@ -1,6 +1,6 @@
 ﻿namespace BeatEvaluatorGUI
 {
-    partial class Form1
+    partial class BeatEvaluator
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // BeatEvaluator
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.ClientSize = new System.Drawing.Size(934, 511);
+            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximizeBox = false;
+            this.Name = "BeatEvaluator";
+            this.Text = "Beat Evaluator";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
