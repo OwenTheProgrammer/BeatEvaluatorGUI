@@ -7,4 +7,4 @@
 	#define EXPORT_API __declspec(dllimport)
 #endif
 
-float EXPORT_API GetAudioTime(const char* FilePath, int* error);
+float EXPORT_API GetAudioTime(const char* FilePath);

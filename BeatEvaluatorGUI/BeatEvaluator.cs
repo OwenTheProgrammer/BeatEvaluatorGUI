@@ -23,7 +23,8 @@ namespace BeatEvaluatorGUI
                 MapInfoData Info = FileInterpreter.LoadInfoFile(FolderPath);
                 foreach(var MapDiff in Info.DiffPaths) {
                     string DiffPath = FolderPath + MapDiff.Value;
-                    FileInterpreter.EvaluateMapDiff(Info, DiffPath, MapDiff.Key);
+                    Criteria Evaluation = FileInterpreter.EvaluateMapDiff(Info, DiffPath, MapDiff.Key);
+                    Console.WriteLine("Done");
                 }
             }
         }

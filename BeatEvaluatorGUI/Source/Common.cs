@@ -13,7 +13,47 @@ namespace BeatEvaluatorGUI {
         DotBlock,
     };
 
+    #region JSON objects
+    public class JSON_InfoBlock {
+        public string _songName { get; set; }
+        public string _songAuthorName { get; set; }
+        public string _levelAuthorName { get; set; }
+        public float _beatsPerMinute { get; set; }
+        public string _songFilename { get; set; }
+        public List<JSON_MapSetBlock> _difficultyBeatmapSets { get; set; }
+    }
+    public class JSON_MapSetBlock {
+        public string _beatmapCharacteristicName;
+        public List<JSON_DifficultyBlock> _difficultyBeatmaps;
+    }
+
+    public class JSON_DifficultyBlock {
+        public string _difficulty { get; set; }
+        public string _beatmapFilename { get; set; }
+    }
+
+    public class JSON_MapHandle {
+        public List<JSON_NoteHandle> _notes;
+        public List<JSON_ObstacleHandle> _obstacles;
+    }
+    public class JSON_NoteHandle {
+        public float _time { get; set; }
+        public int _lineIndex { get; set; }
+        public int _lineLayer { get; set; }
+        public NoteType _type { get; set; }
+        public NoteDirection _cutDirection { get; set; }
+    }
+    public class JSON_ObstacleHandle {
+        public float _time { get; set; }
+        public int _lineIndex { get; set; }
+        public int _type { get; set; }
+        public float _duration { get; set; }
+        public int _width { get; set; }
+    }
+    #endregion
+
     public struct MapInfoData {
+        public string FolderPath;
         public string SongName;
         public string SongAuthor;
         public string LevelAuthor;
@@ -21,18 +61,6 @@ namespace BeatEvaluatorGUI {
 
         public string SongFileName;
         public Dictionary<MapDifficulty, string> DiffPaths;
-    }
-
-    public class JSON_MapHandle {
-        public List<JSON_NoteHandle> _notes;
-    }
-
-    public class JSON_NoteHandle {
-        public float _time { get; set; }
-        public int _lineIndex { get; set; }
-        public int _lineLayer { get; set; }
-        public NoteType _type { get; set; }
-        public NoteDirection _cutDirection { get; set; }
     }
 
     public struct Criteria {
