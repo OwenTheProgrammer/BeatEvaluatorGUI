@@ -44,8 +44,12 @@ namespace BeatEvaluatorGUI {
                     break;
                 }   
             }
+            //if(StandardSet == null) {
+                //throw new FieldAccessException("Failed to find standard mapping");
+                //return 
+            //}
             if(StandardSet == null) {
-                throw new FieldAccessException("Failed to find standard mapping");
+                return CollectedData;
             }
             foreach(JSON_DifficultyBlock Diff in StandardSet._difficultyBeatmaps) {
                 MapDifficulty MapDiff = DiffStrings[(string)Diff._difficulty];
@@ -62,12 +66,20 @@ namespace BeatEvaluatorGUI {
             string MapBuffer = File.ReadAllText(Path);
             JSON_MapHandle JsonBuffer = JsonConvert.DeserializeObject<JSON_MapHandle>(MapBuffer);
 
-
-            int BlockCount = JsonBuffer._notes.Count;
-            Console.WriteLine($"Evaluating {BlockCount} blocks..");
-
             Criteria Current = new Criteria();
             Current.Difficulty = Diff;
+            if(JsonBuffer._notes == null)
+                return Current;
+            int BlockCount = JsonBuffer._notes.Count;
+                
+            //Console.WriteLine($"Evaluating {BlockCount} blocks..");
+
+            Current.NoteOverlaps = new List<float>();
+            Current.WallWidth = new List<float>();
+            Current.WallDuration = new List<float>();
+            Current.WallMinDuration = new List<float>();
+            if(BlockCount < 1)
+                return Current;
 
             #region Hot Start Detection
             Current.HotStart = (JsonBuffer._notes[0]._time / Info.BPM) * 60.0f;
@@ -76,7 +88,8 @@ namespace BeatEvaluatorGUI {
             string AudioFile = Info.FolderPath + Info.SongFileName;
             float SongLength = AudioManager.GetAudioTime(AudioFile);
             if(SongLength == -1.0f) {
-                throw new ApplicationException("Failed to read vorbis.");
+                //throw new ApplicationException("Failed to read vorbis.");
+                return Current;
             }
             Current.ColdEnd = SongLength - ((JsonBuffer._notes[BlockCount-1]._time / Info.BPM) * 60.0f);
             #endregion
@@ -88,7 +101,6 @@ namespace BeatEvaluatorGUI {
                     OverlapDatabase[handle._time] = new List<int>();
                 }
             }
-            Current.NoteOverlaps = new List<float>();
             foreach(JSON_NoteHandle handle in JsonBuffer._notes) {
                 int Index = handle._lineLayer * 4 + handle._lineIndex;
                 if(OverlapDatabase[handle._time].Contains(Index)) {
@@ -97,9 +109,6 @@ namespace BeatEvaluatorGUI {
             }
             #endregion
             #region Wall Detections
-            Current.WallWidth = new List<float>();
-            Current.WallDuration = new List<float>();
-            Current.WallMinDuration = new List<float>();
             foreach(JSON_ObstacleHandle handle in JsonBuffer._obstacles) { 
                 if(handle._width < 0.0f) {
                     Current.WallWidth.Add(handle._time);

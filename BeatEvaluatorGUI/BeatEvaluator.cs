@@ -11,11 +11,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
+using System.IO.Compression;
+using System.IO;
+using BeatEvaluatorGUI.Properties;
 
 namespace BeatEvaluatorGUI
 {
     public partial class BeatEvaluator : Form
     {
+        
+
         public static Dictionary<MapDifficulty, string> DiffStrings = new Dictionary<MapDifficulty, string> {
             {MapDifficulty.Easy,"Easy"},
             {MapDifficulty.Normal,"Normal"},
@@ -25,8 +30,17 @@ namespace BeatEvaluatorGUI
         };
 
         private Dictionary<TreeNode, MapNode> QueueData = new Dictionary<TreeNode, MapNode>();
+        private static string WorkingDirectory;
+        public static string TempDir;
+
         public BeatEvaluator() {
             InitializeComponent();
+            WorkingDirectory = Directory.GetCurrentDirectory();
+            //Create a new Temp directory
+            TempDir = WorkingDirectory + "\\Temp";
+            if(Directory.Exists(TempDir))
+                Directory.Delete(TempDir, true);
+            Directory.CreateDirectory(TempDir);
         }
 
         private void EvaluateFolderButton_Click(object sender, EventArgs e) {
@@ -34,9 +48,44 @@ namespace BeatEvaluatorGUI
                 EvaluateMap(EvalFolderDialog.SelectedPath + '\\');
             }
         }
+        private void EvaluateZipFile_Click(object sender, EventArgs e) {
+            if(EvalFileDialog.ShowDialog() == DialogResult.OK) {
+                string FolderName = EvalFileDialog.SafeFileName;
+                FolderName = FolderName.Substring(0, FolderName.LastIndexOf('.'));
+                string FileTemp = $"{TempDir}\\{FolderName}\\";
+                if(Directory.Exists(FileTemp))
+                    Directory.Delete(FileTemp, true);
+                Directory.CreateDirectory(FileTemp);
+                ZipFile.ExtractToDirectory(EvalFileDialog.FileName, FileTemp);
+                EvaluateMap(FileTemp);
+            }
+        }
+
+        private void QueueClear_Click(object sender, EventArgs e) {
+            QueueData.Clear();
+            QueueTree.Nodes.Clear();
+            MapMetrics.Nodes.Clear();
+            MapImage.Visible = false;
+            MapTitle.Visible = false;
+            MapMetrics.Visible = false;
+            MapMetrics.Nodes.Add("HotStart").Text = "Hot Start";
+            MapMetrics.Nodes.Add("ColdEnd").Text = "Cold End";
+            MapMetrics.Nodes.Add("NoteOverlaps").Text = "Note Overlaps";
+            MapMetrics.Nodes.Add("WallWidth").Text = "Wall Width";
+            MapMetrics.Nodes.Add("WallDuration").Text = "Wall Duration";
+            MapMetrics.Nodes.Add("WallMinDuration").Text = "Wall Minimum Duration";
+            if(Directory.Exists(TempDir)){
+                //MapImage.Dispose();
+                Directory.Delete(TempDir, true);
+            }
+            Directory.CreateDirectory(TempDir);
+            GC.Collect();
+        }
 
         public void EvaluateMap(string DirectoryPath) { 
             MapInfoData Info = FileInterpreter.LoadInfoFile(DirectoryPath);
+            ProgressText.Text = ProgressText.Text + $" Evaluating {Info.SongName}..";
+            ProgressText.Update();
             //Evaluate each of the difficuties from the map
             bool AllMet = true;
             List<bool> Passed = new List<bool>();
@@ -67,9 +116,10 @@ namespace BeatEvaluatorGUI
         private void OnQueueSelection(object sender, TreeViewEventArgs e) {
             bool isParent = QueueData.ContainsKey(e.Node);
             MapNode NodeData = QueueData[isParent? e.Node : e.Node.Parent];
-            MapImage.ImageLocation = NodeData.Info.FolderPath + NodeData.Info.CoverImage;
+            //MapImage.ImageLocation = NodeData.Info.FolderPath + NodeData.Info.CoverImage;
+            //MapImage.Load();
 
-            MapImage.Visible = true;
+            //MapImage.Visible = true;
             MapTitle.Visible = true;
             MapMetrics.Visible = !isParent;
             if(isParent) {
@@ -101,6 +151,33 @@ namespace BeatEvaluatorGUI
             for(int i = 0; i < Values.Count; i++) {
                 Node.Nodes.Add($"{i}: {Values[i]} Seconds");
             }
+        }
+
+
+        private void CustomFolderButton_Click(object sender, EventArgs e) {
+            if(EvalFolderDialog.ShowDialog() == DialogResult.OK) {
+                var Folder = Directory.EnumerateDirectories(EvalFolderDialog.SelectedPath);
+                int Denominator = Folder.Count();
+                Console.WriteLine($"Evaluating {Denominator} maps..");
+                LoadingBar.Value = 0;
+
+                int Finished = 0;
+                foreach(string Dir in Folder) {
+                    ProgressText.Text = $"({Finished}/{Denominator}) ";
+                    EvaluateMap(Dir + '\\');
+                    Finished++;
+                    LoadingBar.Value = (int)((float)Finished/(float)Denominator)* LoadingBar.Maximum;
+                    LoadingBar.Update();
+                }
+                LoadingBar.Value = 0;
+                ProgressText.Text = "Finished.";
+                Console.WriteLine("Finished.");
+            }
+        }
+
+        private void BeatEvaluator_FormClosing(object sender, FormClosedEventArgs e) {
+            if (Directory.Exists(TempDir))
+                Directory.Delete(TempDir, true);
         }
     }
 }
