@@ -20,6 +20,7 @@ namespace BeatEvaluatorGUI {
         public string _levelAuthorName { get; set; }
         public float _beatsPerMinute { get; set; }
         public string _songFilename { get; set; }
+        public string _coverImageFilename { get; set; }
         public List<JSON_MapSetBlock> _difficultyBeatmapSets { get; set; }
     }
     public class JSON_MapSetBlock {
@@ -57,11 +58,21 @@ namespace BeatEvaluatorGUI {
         public string SongName;
         public string SongAuthor;
         public string LevelAuthor;
+        public string CoverImage;
         public float BPM;
 
         public string SongFileName;
         public Dictionary<MapDifficulty, string> DiffPaths;
     }
+
+    public enum MapMet {
+        HotStart = 1<<0,
+        ColdEnd = 1<<1,
+        NoteOverlap = 1<<2,
+        WallWidth = 1<<3,
+        WallDuration = 1<<4,
+        WallMinDuration = 1<<5
+    };
 
     public struct Criteria {
         public MapDifficulty Difficulty;
@@ -72,16 +83,24 @@ namespace BeatEvaluatorGUI {
         public List<float> WallDuration;
         public List<float> WallMinDuration;
 
-        public bool PassedCriteria;
+        public MapMet CriteriaPass;
+        public static MapMet AllMet = (MapMet)((1<<6)-1);
 
         //Built this stupidly but easily modifiable
-        public bool Met() {
-            return (HotStart > 1.5f) &&
-                   (ColdEnd > 2.0f) &&
-                   (NoteOverlaps.Count == 0) &&
-                   (WallWidth.Count == 0) &&
-                   (WallDuration.Count == 0) &&
-                   (WallMinDuration.Count == 0);
+        public void UpdateCriteriaFlags() {
+            CriteriaPass = 0;
+            if(HotStart > 1.5f) CriteriaPass |= MapMet.HotStart;
+            if(ColdEnd > 2.0f) CriteriaPass |= MapMet.ColdEnd;
+            if(NoteOverlaps.Count==0) CriteriaPass |= MapMet.NoteOverlap;
+            if(WallWidth.Count==0) CriteriaPass |= MapMet.WallWidth;
+            if(WallDuration.Count==0) CriteriaPass |= MapMet.WallDuration;
+            if(WallMinDuration.Count==0) CriteriaPass |= MapMet.WallMinDuration;
         }
+    }
+
+    public struct MapNode {
+        public string LoadPath;
+        public MapInfoData Info;
+        public List<Criteria> DiffCriteria;
     }
 }

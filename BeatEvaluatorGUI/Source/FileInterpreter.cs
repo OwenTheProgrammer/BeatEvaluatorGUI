@@ -24,11 +24,12 @@ namespace BeatEvaluatorGUI {
 
             string InfoFileData = File.ReadAllText(WorkingDir + "Info.dat");
             JSON_InfoBlock InfoJson = JsonConvert.DeserializeObject<JSON_InfoBlock>(InfoFileData);
-            MapInfoData CollectedData;
+            MapInfoData CollectedData = new MapInfoData();
             CollectedData.FolderPath = WorkingDir;
             CollectedData.SongName = InfoJson._songName;
             CollectedData.SongAuthor = InfoJson._songAuthorName;
             CollectedData.LevelAuthor = InfoJson._levelAuthorName;
+            CollectedData.CoverImage = InfoJson._coverImageFilename;
             CollectedData.BPM = InfoJson._beatsPerMinute;
             CollectedData.SongFileName = InfoJson._songFilename;
             CollectedData.DiffPaths = new Dictionary<MapDifficulty, string>();
@@ -112,7 +113,7 @@ namespace BeatEvaluatorGUI {
                     Current.WallMinDuration.Add(handle._time);
                 }
             }
-            Current.PassedCriteria = Current.Met();
+            Current.UpdateCriteriaFlags();
             return Current;
             #endregion
         }
