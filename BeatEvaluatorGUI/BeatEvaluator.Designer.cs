@@ -29,13 +29,15 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BeatEvaluator));
-            System.Windows.Forms.TreeNode treeNode49 = new System.Windows.Forms.TreeNode("Hot Start");
-            System.Windows.Forms.TreeNode treeNode50 = new System.Windows.Forms.TreeNode("Cold End");
-            System.Windows.Forms.TreeNode treeNode51 = new System.Windows.Forms.TreeNode("Note Overlaps");
-            System.Windows.Forms.TreeNode treeNode52 = new System.Windows.Forms.TreeNode("Wall Width");
-            System.Windows.Forms.TreeNode treeNode53 = new System.Windows.Forms.TreeNode("Wall Duration");
-            System.Windows.Forms.TreeNode treeNode54 = new System.Windows.Forms.TreeNode("Wall Minimum Duration");
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Hot Start");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Cold End");
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("Note Overlaps");
+            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("Wall Width");
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("Wall Duration");
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("Wall Minimum Duration");
             this.HeaderPanel = new System.Windows.Forms.Panel();
+            this.ProgressText = new System.Windows.Forms.Label();
+            this.LoadingBar = new System.Windows.Forms.ProgressBar();
             this.FileInterfacePanel = new System.Windows.Forms.Panel();
             this.ClearQueue = new System.Windows.Forms.Button();
             this.CustomFolderButton = new System.Windows.Forms.Button();
@@ -51,8 +53,6 @@
             this.MapTitle = new System.Windows.Forms.Label();
             this.QueueTree = new System.Windows.Forms.TreeView();
             this.EvalFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.LoadingBar = new System.Windows.Forms.ProgressBar();
-            this.ProgressText = new System.Windows.Forms.Label();
             this.HeaderPanel.SuspendLayout();
             this.FileInterfacePanel.SuspendLayout();
             this.EvaluationPanel.SuspendLayout();
@@ -70,6 +70,25 @@
             this.HeaderPanel.Name = "HeaderPanel";
             this.HeaderPanel.Size = new System.Drawing.Size(1140, 60);
             this.HeaderPanel.TabIndex = 0;
+            // 
+            // ProgressText
+            // 
+            this.ProgressText.AutoSize = true;
+            this.ProgressText.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ProgressText.ForeColor = System.Drawing.Color.White;
+            this.ProgressText.Location = new System.Drawing.Point(353, 21);
+            this.ProgressText.Name = "ProgressText";
+            this.ProgressText.Size = new System.Drawing.Size(0, 19);
+            this.ProgressText.TabIndex = 1;
+            // 
+            // LoadingBar
+            // 
+            this.LoadingBar.Location = new System.Drawing.Point(106, 21);
+            this.LoadingBar.MarqueeAnimationSpeed = 50;
+            this.LoadingBar.Name = "LoadingBar";
+            this.LoadingBar.Size = new System.Drawing.Size(241, 23);
+            this.LoadingBar.TabIndex = 0;
+            this.LoadingBar.Value = 1;
             // 
             // FileInterfacePanel
             // 
@@ -118,14 +137,14 @@
             this.CustomFolderButton.Name = "CustomFolderButton";
             this.CustomFolderButton.Size = new System.Drawing.Size(190, 60);
             this.CustomFolderButton.TabIndex = 4;
-            this.CustomFolderButton.Text = "Evaluate Custom folder";
+            this.CustomFolderButton.Text = "Evaluate Multiple Folder";
             this.CustomFolderButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.CustomFolderButton.UseVisualStyleBackColor = false;
             this.CustomFolderButton.Click += new System.EventHandler(this.CustomFolderButton_Click);
             // 
             // BSRLinkButton
             // 
-            this.BSRLinkButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(237)))), ((int)(((byte)(242)))));
+            this.BSRLinkButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.BSRLinkButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.BSRLinkButton.FlatAppearance.BorderSize = 0;
             this.BSRLinkButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -142,7 +161,7 @@
             // 
             // BPLISTButton
             // 
-            this.BPLISTButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(237)))), ((int)(((byte)(242)))));
+            this.BPLISTButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.BPLISTButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.BPLISTButton.FlatAppearance.BorderSize = 0;
             this.BPLISTButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -170,7 +189,7 @@
             this.EvaluateZipButton.Name = "EvaluateZipButton";
             this.EvaluateZipButton.Size = new System.Drawing.Size(190, 60);
             this.EvaluateZipButton.TabIndex = 1;
-            this.EvaluateZipButton.Text = "Evaluate ZIP file";
+            this.EvaluateZipButton.Text = "Evaluate ZIP File";
             this.EvaluateZipButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.EvaluateZipButton.UseVisualStyleBackColor = false;
             this.EvaluateZipButton.Click += new System.EventHandler(this.EvaluateZipFile_Click);
@@ -188,7 +207,7 @@
             this.EvaluateFolderButton.Name = "EvaluateFolderButton";
             this.EvaluateFolderButton.Size = new System.Drawing.Size(190, 60);
             this.EvaluateFolderButton.TabIndex = 0;
-            this.EvaluateFolderButton.Text = "Evaluate Folder";
+            this.EvaluateFolderButton.Text = "Evaluate Single Folder";
             this.EvaluateFolderButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.EvaluateFolderButton.UseVisualStyleBackColor = false;
             this.EvaluateFolderButton.Click += new System.EventHandler(this.EvaluateFolderButton_Click);
@@ -222,25 +241,25 @@
             this.MapMetrics.ForeColor = System.Drawing.Color.White;
             this.MapMetrics.Location = new System.Drawing.Point(20, 94);
             this.MapMetrics.Name = "MapMetrics";
-            treeNode49.Name = "HotStart";
-            treeNode49.Text = "Hot Start";
-            treeNode50.Name = "ColdEnd";
-            treeNode50.Text = "Cold End";
-            treeNode51.Name = "NoteOverlaps";
-            treeNode51.Text = "Note Overlaps";
-            treeNode52.Name = "WallWidth";
-            treeNode52.Text = "Wall Width";
-            treeNode53.Name = "WallDuration";
-            treeNode53.Text = "Wall Duration";
-            treeNode54.Name = "WallMinDuration";
-            treeNode54.Text = "Wall Minimum Duration";
+            treeNode13.Name = "HotStart";
+            treeNode13.Text = "Hot Start";
+            treeNode14.Name = "ColdEnd";
+            treeNode14.Text = "Cold End";
+            treeNode15.Name = "NoteOverlaps";
+            treeNode15.Text = "Note Overlaps";
+            treeNode16.Name = "WallWidth";
+            treeNode16.Text = "Wall Width";
+            treeNode17.Name = "WallDuration";
+            treeNode17.Text = "Wall Duration";
+            treeNode18.Name = "WallMinDuration";
+            treeNode18.Text = "Wall Minimum Duration";
             this.MapMetrics.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode49,
-            treeNode50,
-            treeNode51,
-            treeNode52,
-            treeNode53,
-            treeNode54});
+            treeNode13,
+            treeNode14,
+            treeNode15,
+            treeNode16,
+            treeNode17,
+            treeNode18});
             this.MapMetrics.Size = new System.Drawing.Size(402, 378);
             this.MapMetrics.TabIndex = 4;
             this.MapMetrics.Visible = false;
@@ -287,25 +306,6 @@
             // 
             this.EvalFileDialog.FileName = "BeatMap";
             this.EvalFileDialog.Filter = "Zip files|*.zip";
-            // 
-            // LoadingBar
-            // 
-            this.LoadingBar.Location = new System.Drawing.Point(106, 21);
-            this.LoadingBar.MarqueeAnimationSpeed = 50;
-            this.LoadingBar.Name = "LoadingBar";
-            this.LoadingBar.Size = new System.Drawing.Size(241, 23);
-            this.LoadingBar.TabIndex = 0;
-            this.LoadingBar.Value = 1;
-            // 
-            // ProgressText
-            // 
-            this.ProgressText.AutoSize = true;
-            this.ProgressText.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ProgressText.ForeColor = System.Drawing.Color.White;
-            this.ProgressText.Location = new System.Drawing.Point(353, 21);
-            this.ProgressText.Name = "ProgressText";
-            this.ProgressText.Size = new System.Drawing.Size(0, 19);
-            this.ProgressText.TabIndex = 1;
             // 
             // BeatEvaluator
             // 

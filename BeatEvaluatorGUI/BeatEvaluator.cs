@@ -139,7 +139,7 @@ namespace BeatEvaluatorGUI
                 FillLine(MapMetrics.Nodes[3], "Wall Width", crit.WallWidth);
                 FillLine(MapMetrics.Nodes[4], "Wall Duration", crit.WallDuration);
                 FillLine(MapMetrics.Nodes[5], "Wall Minimum Duration", crit.WallMinDuration);
-                GC.Collect();
+                //GC.Collect();
             }
         }
 
