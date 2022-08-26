@@ -19,8 +19,6 @@ namespace BeatEvaluatorGUI
 {
     public partial class BeatEvaluator : Form
     {
-        
-
         public static Dictionary<MapDifficulty, string> DiffStrings = new Dictionary<MapDifficulty, string> {
             {MapDifficulty.Easy,"Easy"},
             {MapDifficulty.Normal,"Normal"},
@@ -166,8 +164,9 @@ namespace BeatEvaluatorGUI
                     ProgressText.Text = $"({Finished}/{Denominator}) ";
                     EvaluateMap(Dir + '\\');
                     Finished++;
-                    LoadingBar.Value = (int)((float)Finished/(float)Denominator)* LoadingBar.Maximum;
-                    LoadingBar.Update();
+                    LoadingBar.Value = (int)(((float)Finished/(float)Denominator)*LoadingBar.Maximum);
+                    LoadingBar.Refresh();
+                    //LoadingBar.Update();
                 }
                 LoadingBar.Value = 0;
                 ProgressText.Text = "Finished.";
